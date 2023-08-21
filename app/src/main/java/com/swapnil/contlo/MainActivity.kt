@@ -28,15 +28,18 @@ class MainActivity : AppCompatActivity() {
             val githubApi = it.create(GithubAPI::class.java)
             val githubNetworkServiceImpl = GithubNetworkServiceImpl(githubApi)
             val githubRepository = GithubRepository(githubNetworkServiceImpl)
-            contloViewMode = ViewModelProvider(this, ContloFactory(githubRepository))[ContloViewModel::class.java]
+            contloViewMode = ViewModelProvider(
+                this,
+                ContloFactory(githubRepository)
+            )[ContloViewModel::class.java]
         }
         observeClosePrList()
         contloViewMode.getAppClosedPRs()
     }
 
     private fun observeClosePrList() {
-        contloViewMode.pullRequestStatus.observe(this) {status ->
-            when(status) {
+        contloViewMode.pullRequestStatus.observe(this) { status ->
+            when (status) {
                 is Status.Error -> {
                     Log.e(TAG, "observeClosePrList: Error: ${status.errorMsg}")
                     Toast.makeText(this, status.errorMsg, Toast.LENGTH_SHORT).show()
