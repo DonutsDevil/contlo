@@ -65,6 +65,8 @@ class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetwork
                 val title = jsonObject.getString("title")
                 val createdAt = jsonObject.getString("created_at")
                 val closedAt = jsonObject.getString("closed_at")
+                val number = jsonObject.getInt("number")
+                val prUrl = jsonObject.getString("html_url")
 
                 val userObject = jsonObject.getJSONObject("user")
                 val userName = userObject.getString("login")
@@ -75,7 +77,7 @@ class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetwork
                         .not() && userAvatarUrl.isNullOrEmpty().not()
                 ) {
                     val user = User(userName, userAvatarUrl)
-                    val pullRequest = PullRequest(title, createdAt, closedAt, user)
+                    val pullRequest = PullRequest(title, createdAt, closedAt, user, number, prUrl)
                     pullRequestList.add(pullRequest)
                 }
 
