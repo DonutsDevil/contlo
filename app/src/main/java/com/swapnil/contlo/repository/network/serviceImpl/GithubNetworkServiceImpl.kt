@@ -1,6 +1,9 @@
 package com.swapnil.contlo.repository.network.serviceImpl
 
+import android.content.Context
 import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.swapnil.contlo.model.PullRequest
 import com.swapnil.contlo.model.User
 import com.swapnil.contlo.repository.network.service.GithubAPI
@@ -13,13 +16,28 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+
 class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetworkService {
     private val TAG = "GithubNetworkServiceImp"
-    override suspend fun getClosedPRs(): Status<List<PullRequest>> {
+    override suspend fun getClosedPRs(context: Context): Status<List<PullRequest>> {
         val responseBody = githubAPI.getAllClosedPRs()
         val jsonString = getJsonString(responseBody)
         Log.d(TAG, "getClosedPRs: jsonString: $jsonString")
-        return getListOfClosedPRs(jsonString)
+        val pullRequestList = getListOfClosedPRs(jsonString)
+        loadImages(pullRequestList, context)
+        return pullRequestList
+    }
+
+    private fun loadImages(pullRequestState: Status<List<PullRequest>>, context: Context) {
+
+        if (pullRequestState is Status.Success) {
+            pullRequestState.data!!.forEach { pullRequest ->
+                Glide.with(context)
+                    .load(pullRequest.user.avatarUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .preload();
+            }
+        }
     }
 
     private fun getJsonString(responseBody: ResponseBody?): String? {

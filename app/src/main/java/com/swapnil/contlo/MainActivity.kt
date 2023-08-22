@@ -1,10 +1,11 @@
 package com.swapnil.contlo
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Adapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,11 +15,12 @@ import com.swapnil.contlo.repository.network.service.GithubAPI
 import com.swapnil.contlo.repository.network.serviceImpl.GithubNetworkServiceImpl
 import com.swapnil.contlo.utility.NetworkConstants
 import com.swapnil.contlo.utility.Status
+import com.swapnil.contlo.utility.adapters.ClickListener
 import com.swapnil.contlo.utility.adapters.PullRequestAdapter
 import com.swapnil.contlo.viewmodel.ContloFactory
 import com.swapnil.contlo.viewmodel.ContloViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ClickListener {
     private val TAG = "MainActivity"
     private lateinit var contloViewMode: ContloViewModel
 
@@ -41,11 +43,11 @@ class MainActivity : AppCompatActivity() {
         }
         setUpRvPullRequest()
         observeClosePrList()
-        contloViewMode.getAppClosedPRs()
+        contloViewMode.getAppClosedPRs(this)
     }
 
     private fun setUpRvPullRequest() {
-        pullRequestAdapter = PullRequestAdapter()
+        pullRequestAdapter = PullRequestAdapter(this)
         rvPullRequest.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvPullRequest.adapter = pullRequestAdapter
     }
@@ -69,6 +71,20 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onPullRequestClicked(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.setPackage("com.android.chrome")
+
+        // Check if Chrome is installed, otherwise use a default browser
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            // If Chrome is not installed, use a default browser
+            intent.setPackage(null)
+            startActivity(intent)
         }
     }
 }

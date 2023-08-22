@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.swapnil.contlo.R
 import com.swapnil.contlo.model.PullRequest
 
-class PullRequestAdapter :
+class PullRequestAdapter(private val clickListener: ClickListener) :
     ListAdapter<PullRequest, PullRequestAdapter.Companion.Holder>(PullRequestDiffUtil()) {
 
     companion object {
@@ -40,6 +41,13 @@ class PullRequestAdapter :
                 tvCreatedAt.text = pullRequest.createdAt
                 tvClosedAt.text = pullRequest.closedAt
                 tvTitleLabelValue.text = pullRequest.title
+                loadImage(pullRequest.user.avatarUrl)
+            }
+
+            private fun loadImage(url: String) {
+                Glide.with(itemView.context)
+                    .load(url)
+                    .into(ivAvatar)
             }
         }
     }
@@ -51,10 +59,16 @@ class PullRequestAdapter :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val pullRequest = getItem(position)
+        holder.itemView.setOnClickListener {
+            clickListener.onPullRequestClicked(pullRequest.prUrl)
+        }
         holder.setData(pullRequest)
     }
 }
 
+interface ClickListener {
+    fun onPullRequestClicked(url: String)
+}
 class PullRequestDiffUtil : DiffUtil.ItemCallback<PullRequest>() {
     override fun areItemsTheSame(oldItem: PullRequest, newItem: PullRequest): Boolean {
         return oldItem == newItem

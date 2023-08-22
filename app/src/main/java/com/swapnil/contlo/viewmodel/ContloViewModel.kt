@@ -1,5 +1,6 @@
 package com.swapnil.contlo.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.*
 import com.swapnil.contlo.model.PullRequest
 import com.swapnil.contlo.repository.GithubRepository
@@ -13,9 +14,9 @@ class ContloViewModel(val githubRepository: GithubRepository): ViewModel() {
         get() = _pullRequestList
 
 
-    fun getAppClosedPRs() {
+    fun getAppClosedPRs(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            val status = githubRepository.getAllClosedPRs()
+            val status = githubRepository.getAllClosedPRs(context.applicationContext)
             _pullRequestList.postValue(status)
         }
     }
