@@ -15,6 +15,9 @@ import org.json.JSONException
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetworkService {
@@ -81,8 +84,8 @@ class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetwork
             for (index in 0 until jsonArray.length() step 1) {
                 val jsonObject = jsonArray.getJSONObject(index)
                 val title = jsonObject.getString("title")
-                val createdAt = jsonObject.getString("created_at")
-                val closedAt = jsonObject.getString("closed_at")
+                val createdAt = convertDateTime(jsonObject.getString("created_at"))
+                val closedAt = convertDateTime(jsonObject.getString("closed_at"))
                 val number = jsonObject.getInt("number")
                 val prUrl = jsonObject.getString("html_url")
 
@@ -90,8 +93,8 @@ class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetwork
                 val userName = userObject.getString("login")
                 val userAvatarUrl = userObject.getString("avatar_url")
 
-                if (title.isNullOrEmpty().not() && createdAt.isNullOrEmpty()
-                        .not() && closedAt.isNullOrEmpty().not() && userName.isNullOrEmpty()
+                if (title.isNullOrEmpty().not() && createdAt?.isEmpty() == false
+                         && closedAt?.isEmpty() == false && userName.isNullOrEmpty()
                         .not() && userAvatarUrl.isNullOrEmpty().not()
                 ) {
                     val user = User(userName, userAvatarUrl)
@@ -107,6 +110,22 @@ class GithubNetworkServiceImpl(private val githubAPI: GithubAPI) : GithubNetwork
         } catch (e: JSONException) {
             e.printStackTrace()
             Status.Error("interruption occurred parsing information from internet")
+        }
+    }
+
+    fun convertDateTime(inputDateTime: String?): String? {
+        if (inputDateTime == null) {
+            return null
+        }
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val date = inputFormat.parse(inputDateTime)
+            val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            outputFormat.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            null
         }
     }
 }
