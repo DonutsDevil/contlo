@@ -7,11 +7,11 @@
 
     <TextView
         android:id="@+id/tv_label"
+        android:text="Name:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name:"
         android:textColor="@color/label"
-        android:textSize="16sp"/>
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/tv_label_value"
@@ -20,5 +20,5 @@
         android:layout_height="wrap_content"
         android:text="Swapnil"
         android:textColor="@color/grey"
-        android:textSize="16sp"/>
+        android:textSize="14sp"/>
 </LinearLayout>

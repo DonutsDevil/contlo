@@ -13,7 +13,7 @@
         android:background="@drawable/rectangle_outline">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_avatar"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_launcher"
@@ -25,15 +25,62 @@
             android:orientation="vertical"
             android:background="@drawable/rectangle_without_top_outline">
 
-            <include
-                android:id="@+id/included_name"
-                layout="@layout/label_text"/>
-            <include
-                android:id="@+id/included_created_on"
-                layout="@layout/label_text"/>
-            <include
-                android:id="@+id/included_closed_on"
-                layout="@layout/label_text"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:text="Name:"
+                    style="@style/labelTextViewStyle"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/tv_label_name_value"
+                    android:text="Swapnil"
+                    style="@style/labelValueTextViewStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:text="Created At:"
+                    style="@style/labelTextViewStyle"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/tv_label_created_value"
+                    android:text="2023-08-22"
+                    style="@style/labelValueTextViewStyle"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:text="Closed At:"
+                    style="@style/labelTextViewStyle"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/tv_label_closed_value"
+                    android:text="2023-08-23"
+                    style="@style/labelValueTextViewStyle"/>
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
@@ -42,7 +89,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle_without_top_outline">
-        <include layout="@layout/label_text" />
+        <include
+            android:id="@+id/include_title"
+            layout="@layout/label_text" />
     </FrameLayout>
 
 </LinearLayout>

@@ -13,4 +13,19 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="baseTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="labelTextViewStyle" parent="baseTextViewStyle">
+        <item name="android:textColor">@color/label</item>
+    </style>
+
+    <style name="labelValueTextViewStyle" parent="baseTextViewStyle">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:layout_marginStart">4dp</item>
+    </style>
 </resources>

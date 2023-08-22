@@ -8,7 +8,7 @@ import java.io.IOException
 
 /**
  * Interceptor responsible for retrying the API request if failure after 2 secs
- * @param maxAttempts: defines number of time [com.swapnil.myapplication.network.RetryManager] should retry
+ * @param maxAttempts: defines number of time [com.swapnil.contlo.repository.network.interceptors.RetryManager] should retry
  */
 class RetryManager(private val maxAttempts: Int): Interceptor {
     private val TAG = "RetryManager"
